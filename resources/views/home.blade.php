@@ -13,8 +13,14 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
-                    You are logged in!
+                    <ul>
+                       <li>
+                           <a href="{{route('create')}}">Crear Contacto</a>
+                       </li>
+                       <li>
+                           <a href="{{route('list-contact')}}">Listar Contacto</a>
+                       </li>
+                   </ul>
                 </div>
             </div>
         </div>

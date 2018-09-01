@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Contact;
 
 class ContactController extends Controller
 {
@@ -13,7 +14,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        return view('Contact.create');
+        return view('Contact.list-contact');
     }
 
     /**
@@ -23,7 +24,7 @@ class ContactController extends Controller
      */
     public function create()
     {
-        //
+        return view('Contact.create');
     }
 
     /**
@@ -32,9 +33,27 @@ class ContactController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+   // public function store(Request $request)
+    public function store(\App\Http\Requests\ContactRequest $request)
     {
-        dd($request);
+        try {
+        $objContact = new Contact();
+        $user_id=\Auth::id();
+        $objContact->name=$request->name;
+        $objContact->phone=$request->phone;
+        $objContact->adress=$request->adress;
+        $objContact->email=$request->email;
+        $objContact->birthday=$request->fnac;
+        $objContact->user_id=$user_id;
+            if($objContact->save()){
+                \Session::flash('success', 'Contacto creado con exito!');
+                return back();
+            }
+            } catch(\Illuminate\Database\QueryException $ex){
+            \Session::flash('error',$ex->getMessage());
+            \Log::error('Error al crear contacto LINE: '.$ex->getLine().' FILE: '.$ex->getFile().'Message: '.$ex->getMessage());
+            return back();
+        }
     }
 
     /**

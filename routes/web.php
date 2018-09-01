@@ -17,7 +17,9 @@ Route::get('/', function () {
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', 'HomeController@index')->name('home');
-    Route::get('/create', 'ContactController@index')->name('create');
+    Route::get('/create', 'ContactController@create')->name('create');
+    Route::get('/list-contact', 'ContactController@index')->name('list-contact');
+    Route::post('/save', 'ContactController@store')->name('save');
 });
 
 Auth::routes();

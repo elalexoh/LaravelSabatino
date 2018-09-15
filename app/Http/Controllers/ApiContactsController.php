@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Contact;
 
-class ContactController extends Controller
+class ApiContactsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        return view('Contact.list-contact');
-        
+        //
     }
 
     /**
@@ -25,7 +24,7 @@ class ContactController extends Controller
      */
     public function create()
     {
-        return view('Contact.create');
+        //
     }
 
     /**
@@ -34,27 +33,9 @@ class ContactController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-   // public function store(Request $request)
-    public function store(\App\Http\Requests\ContactRequest $request)
+    public function store(Request $request)
     {
-        try {
-        $objContact = new Contact();
-        $user_id=\Auth::id();
-        $objContact->name=$request->name;
-        $objContact->phone=$request->phone;
-        $objContact->adress=$request->adress;
-        $objContact->email=$request->email;
-        $objContact->birthday=$request->fnac;
-        $objContact->user_id=$user_id;
-            if($objContact->save()){
-                \Session::flash('success', 'Contacto creado con exito!');
-                return back();
-            }
-            } catch(\Illuminate\Database\QueryException $ex){
-            \Session::flash('error',$ex->getMessage());
-            \Log::error('Error al crear contacto LINE: '.$ex->getLine().' FILE: '.$ex->getFile().'Message: '.$ex->getMessage());
-            return back();
-        }
+        //
     }
 
     /**
@@ -63,9 +44,19 @@ class ContactController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function listContacts($id)
     {
-        //
+         try {
+            $objContacts=new Contact();
+            $data=$objContacts->where('user_id',$id)->get()->all();
+             return response()->json( [ 'msg' => 'Operacion Satisfactoria', 'data'=>$data ],200);
+        } catch(\Illuminate\Database\QueryException $ex){
+ 
+            \Log::error('Error al crear contacto LINE: '.$ex->getLine().' FILE: '.$ex->getFile().'Message: '.$ex->getMessage());
+             return response()->json( [ 'msg' => 'Error al consultar contacto', 'data'=>array() ],500);
+        }
+ 
+ 
     }
 
     /**

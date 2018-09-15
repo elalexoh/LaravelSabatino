@@ -18,7 +18,7 @@ Route::get('/', function () {
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/create', 'ContactController@create')->name('create');
-    Route::get('/list-contact', 'ContactController@index')->name('list-contact');
+    Route::get('/list-contact', 'ContactController@index')->name('list');
     Route::post('/save', 'ContactController@store')->name('save');
 });
 
